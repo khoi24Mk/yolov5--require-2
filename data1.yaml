@@ -1,0 +1,9 @@
+train: /content/drive/MyDrive/sth/vehicle/vehicle/train/images  # 128 images
+val: /content/drive/MyDrive/sth/vehicle/vehicle/val/images  # 128 images
+
+# number of classes
+nc: 8
+
+# class names
+names: ['auto','bus','car','lcv','motorcycle','multiaxle','tractor','truck']
+
