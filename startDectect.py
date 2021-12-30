@@ -53,9 +53,10 @@ class Detector:
         self.hide_conf= None
         self.update= None
         self.weights = None
-
         self.visualize = None
         self.view_img = None
+
+        self.data_dir = None
 
 
     def initArguments(self,
@@ -73,15 +74,16 @@ class Detector:
         save_img, hide_labels, hide_conf, update, weights,  visualize,  view_img\
 
 
-    def startDections(self):
+    def startDections(self, data_dir):
+        self.data_dir = data_dir
         # Dataloader
         if self.webcam:
             view_img = check_imshow()
             cudnn.benchmark = True  # set True to speed up constant image size inference
-            dataset = LoadStreams(self.source, img_size=self.imgsz, stride=self.stride, auto=self.pt)
+            dataset = LoadStreams(data_dir, img_size=self.imgsz, stride=self.stride, auto=self.pt)
             bs = len(dataset)  # batch_size
         else:
-            dataset = LoadImages(self.source, img_size=self.imgsz, stride=self.stride, auto=self.pt)
+            dataset = LoadImages(data_dir, img_size=self.imgsz, stride=self.stride, auto=self.pt)
             bs = 1  # batch_size
         vid_path, vid_writer = [None] * bs, [None] * bs
 
@@ -188,3 +190,20 @@ class Detector:
             LOGGER.info(f"Results saved to {colorstr('bold', self.save_dir)}{s}")
         if self.update:
             strip_optimizer(self.weights)  # update model (to fix SourceChangeWarning)
+
+
+
+        # ++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
