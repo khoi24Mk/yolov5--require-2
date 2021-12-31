@@ -1,6 +1,7 @@
 
 import argparse
 import os
+import pathlib
 import sys
 from pathlib import Path
 
@@ -58,6 +59,7 @@ class Detector:
 
         self.data_dir = None
         self.img_info = []
+        self.save_detection = None
 
 
     def initArguments(self,
@@ -77,6 +79,7 @@ class Detector:
 
     def startDections(self, data_dir):
         self.data_dir = data_dir
+        self.img_info = []
         # Dataloader
         if self.webcam:
             view_img = check_imshow()
@@ -91,6 +94,18 @@ class Detector:
         # Run inference
         self.model.warmup(imgsz=(1, 3, *self.imgsz), half=self.half)  # warmup
         dt, seen = [0.0, 0.0, 0.0], 0
+
+        folder_index = 0
+        print("PATH DIR")
+        print(self.save_dir)
+        while (os.path.isdir(str(self.save_dir / f'det{folder_index}'))):
+            folder_index += 1
+        pathlib.Path(str(self.save_dir / f'det{folder_index}')).mkdir(parents=True, exist_ok=True)
+        self.save_detection = (self.save_dir / f'det{folder_index}')
+
+
+
+
         for path, im, im0s, vid_cap, s in dataset:
             t1 = time_sync()
             im = torch.from_numpy(im).to(self.device)
@@ -125,8 +140,8 @@ class Detector:
                     p, im0, frame = path, im0s.copy(), getattr(dataset, 'frame', 0)
 
                 p = Path(p)  # to Path
-                save_path = str(self.save_dir / p.name)  # im.jpg
-                txt_path = str(self.save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt
+                save_path = str(self.save_detection / p.name)  # im.jpg
+                txt_path = str(self.save_detection / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt
                 s += '%gx%g ' % im.shape[2:]  # print string
                 str_img+='%gx%g ' % im.shape[2:]
                 gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh

@@ -7,7 +7,7 @@ from pathlib import Path
 from PyQt5 import QtCore
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QDialog
 from PyQt5.uic.properties import QtGui
 
 from detect import mainw
@@ -17,10 +17,27 @@ from process_screen import Ui_MainWindow
 from startDectect import Detector
 
 from utils.general import increment_path
+from warning import Ui_Dialog
+import subprocess, os, platform
 
 count = 0
 
-detecter = None;
+detecter = None
+
+
+class EmployeeDlg(QDialog):
+    """Employee dialog."""
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.mess = Ui_Dialog()
+        self.mess.setupUi(self)
+
+        self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
+        self.setWindowFlags(QtCore.Qt.SplashScreen | QtCore.Qt.FramelessWindowHint );
+        self.mess.pushButton.clicked.connect(self.closeFunction)
+    def closeFunction(self):
+        self.close()
+
 
 
 class WindowMain(QMainWindow):
@@ -45,6 +62,7 @@ class WindowMain(QMainWindow):
         self.ui.Bopen.clicked.connect(self.openFunction)
 
         self.ui.Bdetect.clicked.connect(self.detectFunction)
+        self.ui.Bview.clicked.connect(self.viewFunction)
 
         self.ui.Bleftt.clicked.connect(self.leftFunctions)
         self.ui.Bleftt.setEnabled(False)
@@ -66,7 +84,13 @@ class WindowMain(QMainWindow):
         self.ui.label_5.setText("Image Info: " + self.img_info[self.currentIndex])
 
     def rightFunctions(self):
+
         print("right")
+        print("right")
+        print(self.currentIndex)
+        print(len(self.img))
+        print(len(self.img_info))
+
         if self.currentIndex + 1 == len(self.img):
             self.currentIndex = 0
         else:
@@ -93,24 +117,36 @@ class WindowMain(QMainWindow):
         fname = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
         self.ui.lineEdit.setText(fname)
 
+    def cleanUP(self):
+        self.currentIndex = 0
+        self.img_info = []
+        self.img = []
+
     def detectFunction(self):
+
+        if (not self.ui.lineEdit.text()):
+            dlg = EmployeeDlg(self)
+            dlg.exec_()
+            return
+
         global detecter
+        self.cleanUP()
         print("CLICKED")
         with concurrent.futures.ThreadPoolExecutor() as executor:
             executor.submit(detecter.startDections(self.ui.lineEdit.text()))
 
 
-        self.save_dir = detecter.save_dir
+        self.save_dir = detecter.save_detection
         print("savingggggg ")
-        print(detecter.save_dir)
+        print(detecter.save_detection)
 
         self.img = next(walk(self.save_dir), (None, None, []))[2]  # [] if no file
         self.img_info = detecter.img_info
         print(self.img)
         print("TESTING")
-        self.ui.label_5.setText("Image Info: " + self.img_info[-1])
+        self.ui.label_5.setText("Image Info: " + self.img_info[0])
 
-        img_dir = str(self.save_dir / self.img[-1])
+        img_dir = str(self.save_dir / self.img[0])
         print("IMG ")
         print(img_dir)
         str_img = "image.jpg"
@@ -124,6 +160,20 @@ class WindowMain(QMainWindow):
 
         self.ui.Bleftt.setEnabled(True)
         self.ui.Bright.setEnabled(True)
+
+    def viewFunction (self):
+        if (not self.ui.lineEdit.text()):
+            dlg = EmployeeDlg(self)
+            dlg.exec_()
+            return
+        img_dir = str(self.save_dir / self.img[self.currentIndex])
+
+        if platform.system() == 'Darwin':  # macOS
+            subprocess.call(('open', img_dir))
+        elif platform.system() == 'Windows':  # Windows
+            os.startfile(img_dir)
+        else:  # linux variants
+            subprocess.call(('xdg-open', img_dir))
 
 
 class WindowLoading(QMainWindow):
