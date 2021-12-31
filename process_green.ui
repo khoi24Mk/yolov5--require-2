@@ -131,6 +131,11 @@ QPushButton:hover {
 	color:white;
 	background-color: #6E3CBC;
 	border-radius:10px;
+}
+
+QPushButton:hover{
+	background:cyan;
+	color:black;
 }</string>
        </property>
        <property name="text">
@@ -236,6 +241,11 @@ QPushButton:hover {
 	color:white;
 	background-color: #6E3CBC;
 	border-radius:10px;
+}
+
+QPushButton:hover{
+	background:cyan;
+	color:black;
 }</string>
         </property>
         <property name="text">
@@ -304,6 +314,11 @@ QPushButton:hover {
 	color:white;
 	background-color: #6E3CBC;
 	border-radius:10px;
+}
+
+QPushButton:hover{
+	background:cyan;
+	color:black;
 }</string>
         </property>
         <property name="text">
@@ -356,6 +371,25 @@ QPushButton:hover {
          <string>◀️</string>
         </property>
        </widget>
+      </widget>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="geometry">
+        <rect>
+         <x>660</x>
+         <y>120</y>
+         <width>81</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QCheckBox{
+	font-size:15px;
+	color: grey;
+}</string>
+       </property>
+       <property name="text">
+        <string>Folder</string>
+       </property>
       </widget>
      </widget>
     </item>

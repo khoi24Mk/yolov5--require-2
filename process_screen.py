@@ -79,6 +79,11 @@ class Ui_MainWindow(object):
 "    color:white;\n"
 "    background-color: #6E3CBC;\n"
 "    border-radius:10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background:cyan;\n"
+"    color:black;\n"
 "}")
         self.Bopen.setObjectName("Bopen")
         self.lineEdit = QtWidgets.QLineEdit(self.frame)
@@ -123,22 +128,29 @@ class Ui_MainWindow(object):
 "    color:white;\n"
 "    background-color: #6E3CBC;\n"
 "    border-radius:10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background:cyan;\n"
+"    color:black;\n"
 "}")
         self.Bdetect.setObjectName("Bdetect")
         self.Limage = QtWidgets.QLabel(self.frame_2)
         self.Limage.setGeometry(QtCore.QRect(60, 30, 161, 181))
         self.Limage.setStyleSheet("QLabel{\n"
 "    \n"
-"    border: 1px solid grey;\n"
+# "    border: 1px solid grey;\n"
+  "border-image: url(image.jpg);"
 "}\n"
 "")
         self.Limage.setText("")
         self.Limage.setObjectName("Limage")
         self.label_5 = QtWidgets.QLabel(self.frame_2)
-        self.label_5.setGeometry(QtCore.QRect(50, 240, 491, 51))
+        self.label_5.setGeometry(QtCore.QRect(50, 240, 491, 100))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.label_5.setFont(font)
+        self.label_5.setWordWrap(True)
         self.label_5.setStyleSheet("QLabel{\n"
 "    Color: #F5F5F5;\n"
 "}\n"
@@ -151,6 +163,11 @@ class Ui_MainWindow(object):
 "    color:white;\n"
 "    background-color: #6E3CBC;\n"
 "    border-radius:10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background:cyan;\n"
+"    color:black;\n"
 "}")
         self.Bview.setObjectName("Bview")
         self.Bright = QtWidgets.QPushButton(self.frame_2)
@@ -175,6 +192,13 @@ class Ui_MainWindow(object):
 "    background-color: #64b5f6;\n"
 "}")
         self.Bleftt.setObjectName("Bleftt")
+        self.checkBox = QtWidgets.QCheckBox(self.frame)
+        self.checkBox.setGeometry(QtCore.QRect(660, 120, 81, 20))
+        self.checkBox.setStyleSheet("QCheckBox{\n"
+"    font-size:15px;\n"
+"    color: grey;\n"
+"}")
+        self.checkBox.setObjectName("checkBox")
         self.verticalLayout.addWidget(self.frame)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -198,4 +222,5 @@ class Ui_MainWindow(object):
         self.Bview.setText(_translate("MainWindow", "👀 View"))
         self.Bright.setText(_translate("MainWindow", "▶️"))
         self.Bleftt.setText(_translate("MainWindow", "◀️"))
+        self.checkBox.setText(_translate("MainWindow", "Folder"))
 import picture_rc

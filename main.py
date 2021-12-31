@@ -32,6 +32,7 @@ class WindowMain(QMainWindow):
         self.img = []
         self.currentIndex = 0
         self.save_dir = None
+        self.img_info = None
 
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
@@ -62,6 +63,8 @@ class WindowMain(QMainWindow):
         self.ui.Limage.setPixmap(QPixmap(img_dir))
         self.ui.Limage.setScaledContents(True)
 
+        self.ui.label_5.setText("Image Info: " + self.img_info[self.currentIndex])
+
     def rightFunctions(self):
         print("right")
         if self.currentIndex + 1 == len(self.img):
@@ -73,6 +76,8 @@ class WindowMain(QMainWindow):
         self.ui.Limage.setPixmap(QPixmap(img_dir))
         self.ui.Limage.setScaledContents(True)
 
+        self.ui.label_5.setText("Image Info: " + self.img_info[self.currentIndex])
+
     def closeFunction(self):
         self.close()
 
@@ -80,12 +85,13 @@ class WindowMain(QMainWindow):
         self.showMinimized()
 
     def openFunction(self):
-        fname = QFileDialog.getOpenFileName(self, 'Open file', '',
-                                             "File png (*.png);;File jpg (*.jpg);;All file (*.*)")
-        self.ui.lineEdit.setText(fname[0])
-
-        # fname = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
-        # self.ui.lineEdit.setText(fname)
+        if not self.ui.checkBox.isChecked():
+            fname = QFileDialog.getOpenFileName(self, 'Open file', '',
+                                                "File png (*.png);;File jpg (*.jpg);;All file (*.*)")
+            self.ui.lineEdit.setText(fname[0])
+            return
+        fname = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        self.ui.lineEdit.setText(fname)
 
     def detectFunction(self):
         global detecter
@@ -99,8 +105,10 @@ class WindowMain(QMainWindow):
         print(detecter.save_dir)
 
         self.img = next(walk(self.save_dir), (None, None, []))[2]  # [] if no file
-
+        self.img_info = detecter.img_info
         print(self.img)
+        print("TESTING")
+        self.ui.label_5.setText("Image Info: " + self.img_info[-1])
 
         img_dir = str(self.save_dir / self.img[-1])
         print("IMG ")

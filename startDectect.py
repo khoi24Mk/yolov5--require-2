@@ -57,6 +57,7 @@ class Detector:
         self.view_img = None
 
         self.data_dir = None
+        self.img_info = []
 
 
     def initArguments(self,
@@ -116,9 +117,10 @@ class Detector:
             # Process predictions
             for i, det in enumerate(pred):  # per image
                 seen += 1
+                str_img=''
                 if self.webcam:  # batch_size >= 1
                     p, im0, frame = path[i], im0s[i].copy(), dataset.count
-                    s += f'{i}: '
+                    # s += f'{i}: '
                 else:
                     p, im0, frame = path, im0s.copy(), getattr(dataset, 'frame', 0)
 
@@ -126,6 +128,7 @@ class Detector:
                 save_path = str(self.save_dir / p.name)  # im.jpg
                 txt_path = str(self.save_dir / 'labels' / p.stem) + ('' if dataset.mode == 'image' else f'_{frame}')  # im.txt
                 s += '%gx%g ' % im.shape[2:]  # print string
+                str_img+='%gx%g ' % im.shape[2:]
                 gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]  # normalization gain whwh
                 imc = im0.copy() if self.save_crop else im0  # for save_crop
                 annotator = Annotator(im0, line_width=self.line_thickness, example=str(self.names))
@@ -137,6 +140,7 @@ class Detector:
                     for c in det[:, -1].unique():
                         n = (det[:, -1] == c).sum()  # detections per class
                         s += f"{n} {self.names[int(c)]}{'s' * (n > 1)}, "  # add to string
+                        str_img+= f"{n} {self.names[int(c)]}{'s' * (n > 1)}, "
 
                     # Write results
                     for *xyxy, conf, cls in reversed(det):
@@ -153,7 +157,9 @@ class Detector:
                             if self.save_crop:
 
                                 save_one_box(xyxy, imc, file=self.save_dir / 'crops' / self.names[c] / f'{p.stem}.jpg', BGR=True)
-
+                self.img_info.append(str_img)
+                print("NEXT")
+                print(f'{s}Done. ({t2 - t1:.3f}s)')
                 # Print time (inference-only)
                 LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
 
@@ -181,6 +187,9 @@ class Detector:
                                 save_path += '.mp4'
                             vid_writer[i] = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
                         vid_writer[i].write(im0)
+
+
+
         print("RESURESULT")  # +++++++++++++++++++++++++++++++++++
         # Print results
         t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
