@@ -96,9 +96,9 @@ class Ui_LoadingWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.Title.setText(_translate("MainWindow", "<Strong>Your</Strong> power"))
-        self.Description.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Your</span><span style=\" font-style:italic;\"> Description</span></p></body></html>"))
-        self.loading.setText(_translate("MainWindow", "loading . . ."))
+        self.Title.setText(_translate("MainWindow", "<Strong>High</Strong> way"))
+        self.Description.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-weight:600; font-style:italic;\">Yolo</span><span style=\" font-style:italic;\"> v5</span></p></body></html>"))
+        self.loading.setText(_translate("MainWindow", "loading model . . ."))
 
 
 if __name__ == "__main__":

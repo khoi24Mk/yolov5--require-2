@@ -64,7 +64,7 @@ def run(weights=ROOT / 'runs/train/exp5/weights/best.pt',  # model.pt path(s)
         half=False,  # use FP16 half-precision inference
         dnn=False,  # use OpenCV DNN for ONNX inference
         ):
-    weights = ['runs/train/exp5/weights/best.pt']
+    weights = ['runs/train/exp9/weights/best.pt']
 
     print("LOADING")#+++++++++++++++++++++++++++++++++++
     source = str(source)
